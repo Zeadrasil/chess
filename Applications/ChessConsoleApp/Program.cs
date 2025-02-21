@@ -5,13 +5,16 @@ internal class Program
 {
     private static void Main()
     {
-        var board = new Board(8, true);
+        Console.WriteLine("Would you like to play chess 960? Enter \"960\" for yes");
+        string? result = Console.ReadLine();
+        bool is960 = result != null && result.Trim() == "960";
+        var board = new Board(8, !is960, is960);
 
         while (true)
         {
 
             DrawBoard(board);
-            Console.WriteLine("Enter the piece you want to move (ex. 02)");
+            Console.WriteLine("Enter the piece you want to move in the format of row from top then column from left(ex. 02)");
 
             IPiece? pieceToMove = null;
 

@@ -207,24 +207,26 @@ namespace Chess.Core
         private static bool IsKingInCheck(Board board, char attackerColor)
         {
             var kingPos = attackerColor == 'w' ? board.BlackKingLocation : board.WhiteKingLocation;
-            var king = board.GetTile(kingPos);
-
-            foreach (var tile in board.Tiles)
+            if (kingPos != null)
             {
-                if (tile.Piece == null) continue;
-                if (tile.Piece is King) continue;
+                var king = board.GetTile(kingPos);
 
-                if (tile.Piece.Color == attackerColor)
+                foreach (var tile in board.Tiles)
                 {
-                    board.KingInCheck = null;
-                    var attackerMoves = board.GetPiece(tile.Row, tile.Column).GetValidMoves(board);
-                    if (attackerMoves.Any(a => a.Row == kingPos.Row && a.Column == kingPos.Column))
+                    if (tile.Piece == null) continue;
+                    if (tile.Piece is King) continue;
+
+                    if (tile.Piece.Color == attackerColor)
                     {
-                        return true;
+                        board.KingInCheck = null;
+                        var attackerMoves = board.GetPiece(tile.Row, tile.Column).GetValidMoves(board);
+                        if (attackerMoves.Any(a => a.Row == kingPos.Row && a.Column == kingPos.Column))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
-
             return false;
         }
 
