@@ -461,25 +461,27 @@ namespace Chess.Core
         {
 
             var kingPos = attackerColor == 'w' ? _blackKingLocation : _whiteKingLocation;
-            foreach (var tile in _tiles)
+            if (kingPos != null)
             {
-                if (tile.Piece == null) continue;
-                if (tile.Piece is King) continue;
-
-                if (tile.Piece.Color == attackerColor)
+                foreach (var tile in _tiles)
                 {
-                    var attackerMoves = GetPiece(tile.Row, tile.Column).GetValidMoves(this);
-                    if (attackerMoves.Any(a => a.Row == kingPos.Row && a.Column == kingPos.Column))
+                    if (tile.Piece == null) continue;
+                    if (tile.Piece is King) continue;
+
+                    if (tile.Piece.Color == attackerColor)
                     {
-                        var tmpKing = GetPiece(kingPos.Row, kingPos.Column) as King;
-                        if (tmpKing.Color != attackerColor)
+                        var attackerMoves = GetPiece(tile.Row, tile.Column).GetValidMoves(this);
+                        if (attackerMoves.Any(a => a.Row == kingPos.Row && a.Column == kingPos.Column))
                         {
-                            return true;
+                            var tmpKing = GetPiece(kingPos.Row, kingPos.Column) as King;
+                            if (tmpKing.Color != attackerColor)
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
             }
-
             return false;
         }
 
