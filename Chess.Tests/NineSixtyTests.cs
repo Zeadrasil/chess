@@ -7,7 +7,7 @@ namespace Chess.Tests
     {
 
         [Fact]
-        public void DefaultNoNineSixty_IsStandard()
+        public void DefaultNoNineSixty_IsStandardBoardLayout()
         {
             bool isStandardArrangement = false;
             var standardBoard = new Board(8, true);
@@ -29,7 +29,7 @@ namespace Chess.Tests
             Assert.True(isStandardArrangement);
         }
         [Fact]
-        public void DefaultWithNineSixty_IsStandard()
+        public void DefaultWithNineSixty_IsStandardBoardLayout()
         {
             bool isStandardArrangement = false;
             var standardBoard = new Board(8, true);
@@ -51,7 +51,7 @@ namespace Chess.Tests
             Assert.True(isStandardArrangement);
         }
         [Fact]
-        public void NoDefaultWithNineSixty_IsNotStandard()
+        public void NoDefaultWithNineSixty_IsNotStandardLayout()
         {
             bool isStandardArrangement = true;
             var standardBoard = new Board(8, true);
