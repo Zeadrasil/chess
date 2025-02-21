@@ -55,7 +55,7 @@ namespace Chess.Core
         #region constructor
 
         // default constructor
-        public Board(int size, bool addDefaultPieces)
+        public Board(int size, bool addDefaultPieces, bool add960Pieces = false)
         {
             _tiles = new Tile[size, size];
             Size = size;
@@ -66,6 +66,12 @@ namespace Chess.Core
                 AddDefaultPieces();
                 _blackKingLocation = new BoardLocation(0, 4);
                 _whiteKingLocation = new BoardLocation(7, 4);
+            }
+            else if(add960Pieces)
+            {
+                int location = Add960Pieces();
+                _blackKingLocation = new BoardLocation(0, location);
+                _whiteKingLocation = new BoardLocation(7, location);
             }
         }
          
@@ -140,6 +146,69 @@ namespace Chess.Core
                     }
                 }
             }
+        }
+
+        private int Add960Pieces()
+        {
+            Random rand = new Random();
+            int firstRookLocation = rand.Next(8);
+            List<int> potentialLocations = new List<int>();
+            for(int i = 0; i < 8; i++)
+            {
+                if(Math.Abs(firstRookLocation - i) > 1)
+                {
+                    potentialLocations.Add(i);
+                }
+            }
+            int secondRookLocation = potentialLocations[rand.Next(potentialLocations.Count)];
+            int kingLocation = firstRookLocation < secondRookLocation ? rand.Next(firstRookLocation + 1, secondRookLocation) : rand.Next(secondRookLocation + 1, firstRookLocation);
+            potentialLocations = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7 };
+            potentialLocations.Remove(kingLocation);
+            potentialLocations.Remove(secondRookLocation);
+            potentialLocations.Remove(firstRookLocation);
+            int firstBishopLocation = potentialLocations[rand.Next(potentialLocations.Count)];
+            potentialLocations.Remove(firstBishopLocation);
+            for(int i = 0; i < potentialLocations.Count; i++)
+            {
+                if((firstBishopLocation % 2 == 1) == (i % 2 == 1))
+                {
+                    potentialLocations.Remove(i);
+                    i--;
+                }
+            }
+            int secondBishopLocation = potentialLocations[rand.Next(potentialLocations.Count)];
+            potentialLocations = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7 };
+            potentialLocations.Remove(firstBishopLocation);
+            potentialLocations.Remove(kingLocation);
+            potentialLocations.Remove(secondRookLocation);
+            potentialLocations.Remove(firstRookLocation);
+            potentialLocations.Remove(secondBishopLocation);
+            int queenLocation = potentialLocations[rand.Next(potentialLocations.Count)];
+            potentialLocations.Remove(queenLocation);
+            int firstKnightLocation = potentialLocations[0], secondKnightLocation = potentialLocations[1];
+            _tiles[7, firstRookLocation].Piece = new Rook('w', 7, firstRookLocation);
+            _tiles[0, firstRookLocation].Piece = new Rook('b', 0, firstRookLocation);
+            _tiles[7, secondRookLocation].Piece = new Rook('w', 7, secondRookLocation);
+            _tiles[0, secondRookLocation].Piece = new Rook('b', 0, secondRookLocation);
+            _tiles[7, firstBishopLocation].Piece = new Bishop('w', 7, firstBishopLocation);
+            _tiles[0, firstBishopLocation].Piece = new Bishop('b', 0, firstBishopLocation);
+            _tiles[7, secondBishopLocation].Piece = new Bishop('w', 7, secondBishopLocation);
+            _tiles[0, secondBishopLocation].Piece = new Bishop('b', 0, secondBishopLocation);
+            _tiles[7, firstKnightLocation].Piece = new Knight('w', 7, firstKnightLocation);
+            _tiles[0, firstKnightLocation].Piece = new Knight('b', 0, firstKnightLocation);
+            _tiles[7, secondKnightLocation].Piece = new Knight('w', 7, secondKnightLocation);
+            _tiles[0, secondKnightLocation].Piece = new Knight('b', 0, secondKnightLocation);
+            _tiles[7, kingLocation].Piece = new King('w', 7, kingLocation);
+            _tiles[0, kingLocation].Piece = new King('b', 0, kingLocation);
+            _tiles[7, queenLocation].Piece = new Queen('w', 7, queenLocation);
+            _tiles[0, queenLocation].Piece = new Queen('b', 0, queenLocation);
+
+            for(int i = 0; i < 8; i++)
+            {
+                _tiles[6, i].Piece = new Pawn('w', 6, i);
+                _tiles[1, i].Piece = new Pawn('b', 1, i);
+            }
+            return kingLocation;
         }
 
         private void UpdateKingPosition(char color, int row, int col)

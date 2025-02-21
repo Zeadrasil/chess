@@ -5,7 +5,9 @@ internal class Program
 {
     private static void Main()
     {
-        var board = new Board(8, true);
+        Console.WriteLine("Would you like to play chess 960? Enter \"960\" for yes");
+        string? result = Console.ReadLine();
+        var board = new Board(8, true, result!= null && result.Trim() == "960");
 
         while (true)
         {
