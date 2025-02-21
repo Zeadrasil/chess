@@ -170,9 +170,9 @@ namespace Chess.Core
             potentialLocations.Remove(firstBishopLocation);
             for(int i = 0; i < potentialLocations.Count; i++)
             {
-                if((firstBishopLocation % 2 == 1) == (i % 2 == 1))
+                if((firstBishopLocation % 2 == 1) == (potentialLocations[i] % 2 == 1))
                 {
-                    potentialLocations.Remove(i);
+                    potentialLocations.RemoveAt(i);
                     i--;
                 }
             }
